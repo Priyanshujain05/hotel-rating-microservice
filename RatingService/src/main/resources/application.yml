@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: Rating-Service
+  config:
+    import: optional:configserver:http://localhost:8084
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ratings
+    username: postgres
+    password: 1234567898A@z
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Optional: Configure the connection pool (HikariCP is the default)
+  hikari:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    idle-timeout: 30000
+    connection-timeout: 30000
+    max-lifetime: 1800000
+server:
+  port: 8083
+# eureka:
+#   instance:
+#     client:
+#       serverUrl:
+#         defaultZone: http://localhost:8761

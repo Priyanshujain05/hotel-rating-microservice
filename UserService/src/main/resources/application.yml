@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: User-Service
+  config:
+    import: optional:configserver:http://localhost:8084
+  import-check:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user
+    username: postgres
+    password: 1234567898A@z
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Optional: Configure the connection pool (HikariCP is the default)
+  hikari:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    idle-timeout: 30000
+    connection-timeout: 30000
+    max-lifetime: 1800000
+server:
+  port: 8081
+# eureka:
+#   instance:
+#     prefer-ip-address: true
+#     client:
+#       fetch-registry: true
+#       register-with-eureka: true
+#       serverUrl:
+#         defaultZone: http://localhost:8761/eureka
+management:
+  health:
+    disk:
+      enabled: true
+  circuitbreakers:
+    enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, info  # Include other endpoints if needed
+  endpoint:
+    health:
+      show-details: always
+  resilience4j:
+    enabled: true
+management.health.circuitbreakers.enabled: true
+
+
+logging:
+  level:
+    root: INFO
+  file:
+    name: userLogs.log
+# resilience4j:
+#   circuitbreakers:
+#     instances:
+#       ratingHotelBreaker:
+#         registerHealthIndicator: true
+#         eventConsumerBufferSize: 10
+#         failureRateThreshold: 50
+#         minimumNumberOfCalls: 5
+#         automaticTransitionFromOpenToHalfOpenEnabled: true
+#         waitDurationInOpenState: 6s
+#         permittedNumberOfCallsInHalfOpenState: 3
+#         slidingWindowSize: 10
+#         slidingWindowType: COUNT_BASED
+
+resilience4j.circuitbreaker:
+  instances:
+    ratingHotelBreaker:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowType: COUNT_BASED
+      minimumNumberOfCalls: 5
+      waitDurationInOpenState: 50s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      # recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
+
